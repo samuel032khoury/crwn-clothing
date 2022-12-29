@@ -28,8 +28,7 @@ const SignUpForm = () => {
     }
     try {
       const {user} = await createAuthUserWithEmailAndPassword(email, password);
-      const userDocRef = createUserDocumentFromAuth(user, {displayName})
-      console.log("Sign up successful!", userDocRef);
+      await createUserDocumentFromAuth(user, {displayName})
       resetFormFields()
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
@@ -54,7 +53,7 @@ const SignUpForm = () => {
                    value={email}/>
         <FormInput onChange={onchangeHandler} className={'form-input'} label={'Password'} type={'password'}
                    name={'password'} value={password}/>
-        <FormInput onChange={onchangeHandler} className={'form-input'} label={'Password'} type={'password'}
+        <FormInput onChange={onchangeHandler} className={'form-input'} label={'Confirm password'} type={'password'}
                    name={'confirmPassword'} value={confirmPassword}/>
         <Button onClickHandler={submitHandler} submit={true}>SIGN UP</Button>
       </form>
