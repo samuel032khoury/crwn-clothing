@@ -1,8 +1,8 @@
 import {Fragment, useContext} from "react";
 import {Outlet, Link} from "react-router-dom";
 
-import CartIcon from "../cart-icon/cart-icon.component";
-import CartDropdown from "../cart-dropdown/cart-dropdown.component";
+import CartIcon from "../cart-widiget/cart-icon/cart-icon.component";
+import CartDropdown from "../cart-widiget/cart-dropdown/cart-dropdown.component";
 
 import {UserContext} from "../../context/user.context";
 import {CartContext} from "../../context/cart.context";
