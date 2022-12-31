@@ -1,4 +1,4 @@
-import {createContext, useEffect, useState} from "react";
+import {createContext, useReducer} from "react";
 
 const addCartItem = (cartItems, productToBeAdded) => {
   const newCartItems = [...cartItems];
@@ -34,50 +34,81 @@ const removeCarItem = (cartItems, productToBeAdded) => {
   return newCartItems;
 }
 
+const INITIAL_STATE = {
+  cartDropDownDisplay: false,
+  cartItems: [],
+  cartCount: 0,
+  cartTotal: 0,
+}
+
 export const CartContext = createContext({
   cartDropDownDisplay: false,
-  setCartDropDownDisplay: () => {},
   cartItems: [],
   addItemToCart: () => {},
   decrementItemFromCart: () => {},
   removeItemFromCart: () => {},
   cartCount: 0,
-  cartTotal:0,
+  cartTotal: 0,
 })
 
-export const CartProvider = ({children}) => {
-  const [cartDropDownDisplay, setCartDropDownDisplay] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
-  const [cartTotal, setCartTotal] = useState(0);
-  useEffect(() => {
-    setCartCount(cartItems.reduce((total, cartItem) => cartItem.quantity + total, 0));
-  }, [cartItems])
+const cartReducer = (state, action) => {
+  const {type, payload} = action
+  switch (type) {
+    case "UPDATE_CART_ITEMS":
+      return {
+        ...state,
+        ...payload,
+      }
+    case "TOGGLE_CART_DROPDOWN_DISPLAY":
+      return {
+        ...state,
+        cartDropDownDisplay:payload,
+      }
+    default:
+      throw new Error(`Unhandled type ${type} in cartReducer`)
+  }
+}
 
-  useEffect(() => {
-    setCartTotal(cartItems.reduce((total, item) => total + (item.quantity * item.price), 0));
-  }, [cartItems])
+export const CartProvider = ({children}) => {
+  const [state, dispatch] = useReducer(cartReducer, INITIAL_STATE);
+  const {cartDropDownDisplay, cartItems, cartCount, cartTotal} = state
+
+  const toggleCartDropDownDisplay = () => {
+    dispatch({
+      type: "TOGGLE_CART_DROPDOWN_DISPLAY",
+      payload: !cartDropDownDisplay
+    })
+  }
+
+  const updateCartItemsReducer = (newCartItems) => {
+    dispatch({
+      type: "UPDATE_CART_ITEMS",
+      payload: {
+        cartItems: newCartItems,
+        cartCount: newCartItems.reduce((total, cartItem) => cartItem.quantity + total, 0),
+        cartTotal: newCartItems.reduce((total, item) => total + (item.quantity * item.price), 0)
+      },
+    })
+  }
 
   const addItemToCart = (productToBeAdded) => {
-    setCartItems(addCartItem(cartItems, productToBeAdded))
+    updateCartItemsReducer(addCartItem(cartItems, productToBeAdded))
   }
 
   const decrementItemFromCart = (productToBeDecremented) => {
-    setCartItems(decrementCartItem(cartItems, productToBeDecremented))
+    updateCartItemsReducer(decrementCartItem(cartItems, productToBeDecremented))
   }
 
   const removeItemFromCart = (productToBeRemoved) => {
-    setCartItems(removeCarItem(cartItems, productToBeRemoved))
+    updateCartItemsReducer(removeCarItem(cartItems, productToBeRemoved))
   }
 
   const value = {
     cartDropDownDisplay,
-    setCartDropDownDisplay,
+    toggleCartDropDownDisplay,
     cartItems,
     cartCount,
-    setCartCount,
     cartTotal,
-    setCartTotal,
     addItemToCart,
     decrementItemFromCart,
     removeItemFromCart,
