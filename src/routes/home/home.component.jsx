@@ -1,10 +1,10 @@
-import Directory from "../../components/directory/directory.component";
+import DirectoryList from "../../components/directory-list/directory-list.component";
 
 const Home = () => {
-  const categories = [
+  const directories = [
     {
       id: 1,
-      title: "Hat",
+      title: "Hats",
       imageUrl: 'https://i.ibb.co/cvpntL1/hats.png',
     }, {
       id: 2,
@@ -24,7 +24,7 @@ const Home = () => {
       imageUrl: 'https://i.ibb.co/R70vBrQ/men.png',
     }
   ]
-  return <Directory categories={categories}/>;
+  return <DirectoryList directories={directories}/>;
 }
 
 export default Home;

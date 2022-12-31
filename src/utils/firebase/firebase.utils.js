@@ -1,14 +1,15 @@
 import {initializeApp} from "firebase/app"; // app wise
 import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
+  getAuth,
+  GoogleAuthProvider,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
 } from 'firebase/auth' // auth wise
-import {getFirestore, doc, getDoc, setDoc} from 'firebase/firestore' // database wise
+import {collection, doc, getDoc, getDocs, getFirestore, query, setDoc, writeBatch,} from 'firebase/firestore' // database
+// wise
 
 // config object
 const firebaseConfig = {
@@ -36,6 +37,27 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, authGoogleProvi
 
 export const db = getFirestore(firebaseApp);
 
+export const addCollectionAndDocuments = async (collectionKey, documentObjects, docKey) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+  documentObjects.forEach((docObject) => {
+    const categoriesDocRef = doc(collectionRef, docObject[docKey].toLowerCase());
+    batch.set(categoriesDocRef, docObject)
+  })
+  await batch.commit()
+}
+
+export const getQueryDocuments = async (collectionKey) => {
+  const collectionRef = collection(db, collectionKey);
+  const q = query(collectionRef);
+  try {
+    return await getDocs(q)
+  } catch (e) {
+    console.log(e);
+  }
+  return null;
+}
+
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
   if (!userAuth) return;
   const userDocRef = doc(db, 'users', userAuth.uid)
@@ -51,7 +73,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
         ...additionalInformation,
       })
     } catch (e) {
-      console.log('error creating the user', e.message);
+      console.log('Error creating the user', e.message);
     }
   }
   return userDocRef

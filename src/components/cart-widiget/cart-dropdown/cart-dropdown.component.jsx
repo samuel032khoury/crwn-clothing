@@ -12,10 +12,13 @@ const CartDropdown = () => {
   const navigate = useNavigate()
   return (
     <div className={'cart-dropdown-container'}>
-      <div className="cart-items">
+      {cartItems.length ?
+        <div className="cart-items">
         {cartItems.map((item) => <CartItem key={item.id} cartItem={item}/>)}
-      </div>
-      <Button onClickHandler={() => {navigate('/checkout')}}>CHECKOUT</Button>
+      </div> :
+        <h4 style={{textAlign: 'center', marginTop:'120px'}}>YOUR CART IS EMPTY</h4>
+      }
+      <Button onClickHandler={() => {navigate('/checkout')}} disablePredicate={cartItems.length===0}>CHECKOUT</Button>
     </div>
   );
 };
