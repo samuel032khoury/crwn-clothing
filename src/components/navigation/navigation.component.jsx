@@ -10,9 +10,10 @@ import {ReactComponent as CrownLogo} from "../../assets/crown.svg";
 
 import './navigation.styles.scss'
 import {selectCartDropdownDisplay} from "../../store/slices/cart.slice";
+import {selectUser} from "../../store/slices/user.slice";
 
 const Navigation = () => {
-  const {currentUser} = useSelector(state => state.user)
+  const {currentUser} = useSelector(selectUser)
   const cartDropDownDisplay = useSelector(selectCartDropdownDisplay)
 
   return (

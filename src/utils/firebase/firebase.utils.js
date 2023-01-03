@@ -8,8 +8,7 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth' // auth wise
-import {collection, doc, getDoc, getDocs, getFirestore, query, setDoc, writeBatch,} from 'firebase/firestore' // database
-// wise
+import {collection, doc, getDoc, getDocs, getFirestore, query, setDoc} from 'firebase/firestore' // database wise
 
 // config object
 const firebaseConfig = {
@@ -36,16 +35,6 @@ authGoogleProvider.setCustomParameters({prompt: "select_account"})
 export const signInWithGooglePopup = () => signInWithPopup(auth, authGoogleProvider);
 
 export const db = getFirestore(firebaseApp);
-
-export const addCollectionAndDocuments = async (collectionKey, documentObjects, docKey) => {
-  const collectionRef = collection(db, collectionKey);
-  const batch = writeBatch(db);
-  documentObjects.forEach((docObject) => {
-    const categoriesDocRef = doc(collectionRef, docObject[docKey].toLowerCase());
-    batch.set(categoriesDocRef, docObject)
-  })
-  await batch.commit()
-}
 
 export const getQueryDocumentsData = async (collectionKey) => {
   const collectionRef = collection(db, collectionKey);
