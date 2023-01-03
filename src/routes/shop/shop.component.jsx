@@ -3,7 +3,7 @@ import {useEffect} from "react";
 import {useDispatch} from "react-redux";
 
 import {getQueryDocumentsData} from "../../utils/firebase/firebase.utils";
-import {setCategories} from "../../store/categories/categories.action";
+import {setCategories} from "../../store/slices/categories.slice";
 
 import AllCategories from "../../components/shop-all-categories/all-shop-categories.component";
 import ShopCategory from "../../components/shop-category/shop-category.component";

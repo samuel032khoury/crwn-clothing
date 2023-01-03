@@ -1,9 +1,8 @@
-
-import {addItemToCart, decrementItemFromCart, removeItemFromCart} from "../../../store/cart/cart.action";
+import {addItemToCart, decrementItemFromCart, removeItemFromCart} from "../../../store/slices/cart.slice";
 
 import './checkout-item.styles.scss';
 import {useDispatch, useSelector} from "react-redux";
-import {selectCartItems} from "../../../store/cart/cart.selector";
+import {selectCartItems} from "../../../store/slices/cart.slice";
 
 const CheckoutItem = ({product}) => {
   const {name, imageUrl, price, quantity} = product

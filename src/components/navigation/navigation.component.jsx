@@ -9,7 +9,7 @@ import {signOutUser} from "../../utils/firebase/firebase.utils";
 import {ReactComponent as CrownLogo} from "../../assets/crown.svg";
 
 import './navigation.styles.scss'
-import {selectCartDropdownDisplay} from "../../store/cart/cart.selector";
+import {selectCartDropdownDisplay} from "../../store/slices/cart.slice";
 
 const Navigation = () => {
   const {currentUser} = useSelector(state => state.user)

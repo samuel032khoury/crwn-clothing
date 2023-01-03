@@ -1,10 +1,9 @@
-import {CART_ACTION_TYPES} from "./cart.action-types";
+import {createSlice} from "@reduxjs/toolkit";
+import {createSelector} from "reselect";
 
 const addCartItem = (cartItems, productToBeAdded) => {
-  const newCartItems = [...cartItems];
-  // find if cartItems contains product
+  const newCartItems = JSON.parse(JSON.stringify(cartItems));
   const itemIndex = newCartItems.findIndex((item) => item.id === productToBeAdded.id);
-  // if found, increase quantity
   if (itemIndex > -1) {
     newCartItems[itemIndex].quantity += 1;
   } else {
@@ -14,10 +13,8 @@ const addCartItem = (cartItems, productToBeAdded) => {
 }
 
 const decrementCartItem = (cartItems, productToBeAdded) => {
-  const newCartItems = [...cartItems];
-  // find if cartItems contains product
+  const newCartItems = JSON.parse(JSON.stringify(cartItems));
   const itemIndex = newCartItems.findIndex((item) => item.id === productToBeAdded.id);
-  // decrease quantity if quantity is bigger than 1
   newCartItems[itemIndex].quantity -= 1;
   if (newCartItems[itemIndex].quantity === 0) {
     newCartItems.splice(itemIndex, 1);
@@ -26,7 +23,7 @@ const decrementCartItem = (cartItems, productToBeAdded) => {
 }
 
 const removeCarItem = (cartItems, productToBeAdded) => {
-  const newCartItems = [...cartItems];
+  const newCartItems = JSON.parse(JSON.stringify(cartItems));
   // find if cartItems contains product
   const itemIndex = newCartItems.findIndex((item) => item.id === productToBeAdded.id);
   // decrease quantity if quantity is bigger than 1
@@ -34,12 +31,22 @@ const removeCarItem = (cartItems, productToBeAdded) => {
   return newCartItems;
 }
 
-const updateCartItems = (newCartItems) => {
-  return {
-    type: CART_ACTION_TYPES.UPDATE_CART_ITEMS,
-    payload: newCartItems
-  }
+const INITIAL_STATE = {
+  cartDropDownDisplay: false,
+  cartItems: [],
 }
+
+const cartSlice = createSlice({
+  name: 'cart',
+  initialState:INITIAL_STATE,
+  reducers: {
+    toggleCartDropdownDisplay: (state, action) => {state.cartDropDownDisplay = !action.payload},
+    updateCartItems: (state, action) => {state.cartItems = action.payload}
+  }
+})
+
+export const cartReducer = cartSlice.reducer
+export const {toggleCartDropdownDisplay, updateCartItems} = cartSlice.actions
 
 export const addItemToCart = (cartItems, productToBeAdded) => (
   updateCartItems(addCartItem(cartItems, productToBeAdded))
@@ -53,9 +60,24 @@ export const removeItemFromCart = (cartItems, productToBeRemoved) => (
   updateCartItems(removeCarItem(cartItems, productToBeRemoved))
 )
 
-export const toggleCartDropdownDisplay = (cartDropdownIsDisplaying) => {
-  return {
-    type: CART_ACTION_TYPES.TOGGLE_CART_DROPDOWN_DISPLAY,
-    payload: !cartDropdownIsDisplaying
-  }
-}
+const selectCartSlice = state => state.cart
+
+export const selectCartItems = createSelector(
+  [selectCartSlice],
+  cart => cart.cartItems
+)
+
+export const selectCartDropdownDisplay = createSelector(
+  [selectCartSlice],
+  cart => cart.cartDropDownDisplay
+)
+
+export const selectCartCount = createSelector(
+  [selectCartItems],
+  cartItems => cartItems.reduce((total, cartItem) => cartItem.quantity + total, 0)
+)
+
+export const selectCartTotal = createSelector(
+  [selectCartItems],
+  cartItems => cartItems.reduce((total, item) => total + (item.quantity * item.price), 0)
+)

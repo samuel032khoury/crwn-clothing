@@ -4,7 +4,7 @@ import {useParams} from "react-router-dom";
 import './shop-category.styles.scss';
 import ProductCard from "../product-card/product-card.component";
 import {useSelector} from "react-redux";
-import {selectCategoriesMap} from "../../store/categories/categories.selector";
+import {selectCategoriesMap} from "../../store/slices/categories.slice";
 
 const ShopCategory = () => {
   const {category} = useParams();

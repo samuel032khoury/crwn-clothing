@@ -1,5 +1,5 @@
 import {useSelector} from "react-redux";
-import {selectCartTotal} from "../../../store/cart/cart.selector";
+import {selectCartTotal} from "../../../store/slices/cart.slice";
 
 import './checkout-total.styles.scss';
 

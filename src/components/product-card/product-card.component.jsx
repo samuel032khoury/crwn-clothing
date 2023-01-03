@@ -1,8 +1,8 @@
 import {useDispatch, useSelector} from "react-redux";
 
 import Button from "../button/button.component";
-import {addItemToCart} from "../../store/cart/cart.action";
-import {selectCartItems} from "../../store/cart/cart.selector";
+import {addItemToCart} from "../../store/slices/cart.slice";
+import {selectCartItems} from "../../store/slices/cart.slice";
 
 import './product-card.styles.scss'
 

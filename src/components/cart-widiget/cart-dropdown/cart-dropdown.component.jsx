@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 
 import CartItem from "../cart-item/cart-item.component";
 import Button from "../../button/button.component";
-import {selectCartItems} from "../../../store/cart/cart.selector";
+import {selectCartItems} from "../../../store/slices/cart.slice";
 
 import './cart-dropdown.styles.scss'
 

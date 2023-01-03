@@ -4,7 +4,7 @@ import './checkout.styles.scss';
 import CheckoutItem from "../../components/checkout-list/checkout-item/checkout-item.component";
 import CheckoutListHeader from "../../components/checkout-list/checkout-list-header/checkout-list-header.component";
 import CheckoutTotal from "../../components/checkout-list/checkout-total/checkout-total.component";
-import {selectCartCount, selectCartItems} from "../../store/cart/cart.selector";
+import {selectCartCount, selectCartItems} from "../../store/slices/cart.slice";
 
 const Checkout = () => {
   const cartItems = useSelector(selectCartItems);
