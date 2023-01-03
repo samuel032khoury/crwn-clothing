@@ -1,10 +1,27 @@
 import {Routes, Route} from "react-router-dom";
+import {useEffect} from "react";
+import {useDispatch} from "react-redux";
+
+import {getQueryDocumentsData} from "../../utils/firebase/firebase.utils";
+import {setCategories} from "../../store/categories/categories.action";
+
+import AllCategories from "../../components/shop-all-categories/all-shop-categories.component";
+import ShopCategory from "../../components/shop-category/shop-category.component";
 
 import './shop.styles.scss'
-import AllCategories from "./all-categories/all-categories.component";
-import ShopCategory from "./shop-category/shop-category.component";
 
 const Shop = () => {
+  const dispatch = useDispatch()
+
+  // update categories
+  useEffect(() => {
+    const updateCategoriesMap = async () => {
+      const categories = await getQueryDocumentsData('categories');
+      dispatch(setCategories(categories));
+    }
+    updateCategoriesMap().then(null);
+  }, [dispatch]);
+
  return (
   <Routes>
    <Route index element={<AllCategories/>}/>

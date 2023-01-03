@@ -47,11 +47,12 @@ export const addCollectionAndDocuments = async (collectionKey, documentObjects, 
   await batch.commit()
 }
 
-export const getQueryDocuments = async (collectionKey) => {
+export const getQueryDocumentsData = async (collectionKey) => {
   const collectionRef = collection(db, collectionKey);
   const q = query(collectionRef);
   try {
-    return await getDocs(q)
+    const snapshots = await getDocs(q);
+    return snapshots.docs.map(snapshot => snapshot.data())
   } catch (e) {
     console.log(e);
   }
